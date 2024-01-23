@@ -87,8 +87,13 @@ public class DemoFilters implements Drawing {
 		Filter filter = filters[filterIndex];
 		Image originalImage = new Image("images/" + fileNames[imageIndex]);
 		Image filteredImage = filter.process(originalImage);
-		//view.drawImageCentered(Vector.ZERO, applyFilter ? filteredImage : originalImage);
-		view.drawImageCentered(Vector.ZERO, new GreenHistogram().getGreenHistogram(filteredImage));
+		view.drawImageCentered(Vector.ZERO, applyFilter ? filteredImage : originalImage);
+		view.drawImageCentered(Vector.ZERO.add(new Vector(originalImage.getWidth(), originalImage.getHeight()/3)), applyFilter ? 
+				new Zoom(0.6).process(new RedHistogram().getRedHistogram(filteredImage)) : new Zoom(0.6).process(new RedHistogram().getRedHistogram(originalImage)));
+		view.drawImageCentered(Vector.ZERO.add(new Vector(originalImage.getWidth(), 0)), applyFilter ? 
+				new Zoom(0.6).process(new GreenHistogram().getGreenHistogram(filteredImage)) : new Zoom(0.6).process(new GreenHistogram().getGreenHistogram(originalImage)));
+		view.drawImageCentered(Vector.ZERO.add(new Vector(originalImage.getWidth(), -originalImage.getHeight()/3)), applyFilter ? 
+				new Zoom(0.6).process(new BlueHistogram().getBlueHistogram(filteredImage)) : new Zoom(0.6).process(new BlueHistogram().getBlueHistogram(originalImage)));
 		
 		DrawingUtils.drawInfoText(view, "Image: " + fileNames[imageIndex] + "   Filter: " + filter.getClass().getSimpleName());
 	}
@@ -96,7 +101,7 @@ public class DemoFilters implements Drawing {
 	
 	public static void main(String[] args) {
 		Options options = Options.redrawOnEvents();
-		options.drawingSize = new Vector(800, 700);
+		options.drawingSize = new Vector(1500, 1500);
 		DrawingApplication.launch(options);
 	}
 }

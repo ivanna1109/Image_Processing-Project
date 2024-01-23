@@ -25,13 +25,13 @@ public Image getGreenHistogram(Image img) {
 					maxGreen = greenBins[r];
 			}
 		}
-		
+
 		WritableImage output = new WritableImage(256, maxGreen/50);
 		PixelWriter pw = output.getPixelWriter();
 		
 		for(int x = 0; x < 256; x++) {
 			for(int i = 0; i < greenBins[x]/50; i++) {
-				pw.setColor(x, maxGreen/50 - i - 1, Color.hsb(120, 1.0, 1.0));				
+				pw.setColor(x, maxGreen/50 - i - 1, Color.hsb(120, 1.0, 1.0, 0.5));				
 			} 
 		}
 		return output;
