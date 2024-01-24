@@ -1,12 +1,11 @@
 import tkinter as tk
-from PIL import Image
+from load_images import load_image
 from aplikacija import Aplikacija
 
 
 def main():
     root = tk.Tk()
-    originalna_slika = Image.open('images/lena.tif')  # Postavite putanju do vaše slike
-    app= Aplikacija(root, originalna_slika)
+    app= Aplikacija(root, load_image('images/lena.tif'))
     root.mainloop()
 
 if __name__ == '__main__':
