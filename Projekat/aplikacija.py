@@ -2,8 +2,10 @@ from tkinter import *
 from PIL import Image, ImageTk
 import numpy as np
 import adjust
+import brightness
 
 class Aplikacija:
+
     def __init__(self, root, o_image):
         self.prozor = root
         self.prozor.title("Uvod u procesiranje slike - Projekat")
@@ -11,7 +13,8 @@ class Aplikacija:
         self.left_frame = Frame(root, width=500, height=600, bg='grey')
         self.left_frame.grid(row=0, column=0, padx=10, pady=5)
         self.originalImage = o_image
-
+        self.originalImageArray = np.array(o_image)
+        self.filteredImageArray = np.array(o_image)
 
         tool_bar = Frame(self.left_frame, width=250, height=500)
         tool_bar.grid(row=0, column=0, padx=5, pady=5)
@@ -20,11 +23,11 @@ class Aplikacija:
 
         self.adjustSlide = Scale(tool_bar, from_=-25, to=25, tickinterval=50, orient=HORIZONTAL, label='Adjust')
         self.adjustSlide.grid(row=2, column=0, padx=5, pady=5)
-        self.adjustSlide.bind("<ButtonRelease-1>", self.obradi_promenu_adjust)
+        self.adjustSlide.bind("<ButtonRelease-1>", self.primeni_adjust)
 
-        self.brightSlide = Scale(tool_bar, from_=0, to=100, tickinterval=50, orient=   HORIZONTAL, label='Brighteness')
+        self.brightSlide = Scale(tool_bar, from_=-50, to=50, tickinterval=100, orient= HORIZONTAL, label='Brighteness')
         self.brightSlide.grid(row=3, column=0, padx=5, pady=5)
-        self.brightSlide.bind("<ButtonRelease-1>", self.obradi_promenu_vrednosti)
+        self.brightSlide.bind("<ButtonRelease-1>", self.primeni_brightness)
 
         self.contrastSlide = Scale(tool_bar, from_=0, to=100, tickinterval=50, orient=   HORIZONTAL, label='Contrast')
         self.contrastSlide.grid(row=4, column=0, padx=5, pady=5)
@@ -84,30 +87,30 @@ class Aplikacija:
 
     def obradi_promenu_vrednosti(self, event):
         print(self.adjustSlide.get())
-        tmp = adjust.rotate_image_bilinear(np.array(self.originalImage), self.adjustSlide.get())
+        tmp = adjust.rotate_image_bilinear(self.imageArray, self.adjustSlide.get())
         print(type(tmp))
         newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
         self.image = newImage
+        self.imageArray = tmp
         Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
 
-    def obradi_promenu_adjust(self, event):
+    def primeni_adjust(self, event):
         print(self.adjustSlide.get())
-        tmp = adjust.rotate_image_bilinear(np.array(self.originalImage), self.adjustSlide.get())
+        tmp = adjust.rotate_image_bilinear(self.originalImageArray, self.adjustSlide.get())
         print(type(tmp))
         newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
         self.image = newImage
+        self.filteredImageArray = tmp
         Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
         
-
-    def primeni_filter(self):
-        nova_slika = self.obradi_sliku()
-        nova_tk_slika = ImageTk.PhotoImage(nova_slika)
-        self.slika_labela.configure(image=nova_tk_slika)
-        self.slika_labela.image = nova_tk_slika
-        print("vlaDkoNJina")
-
-    def obradi_sliku(self):
-        print("Kliknuli smo na apply filter")
-        pass
+    def primeni_brightness(self, event):
+        print(self.brightSlide.get())
+        tmp = brightness.adjust_brightness(self.filteredImageArray, self.brightSlide.get())
+        print(type(tmp))
+        newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
+        self.image = newImage
+        self.imageArray = tmp
+        Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
+        
 
 
