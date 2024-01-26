@@ -1,8 +1,9 @@
 from tkinter import *
 from PIL import Image, ImageTk
 import numpy as np
-import adjust
-import brightness
+from adjust import rotate_image_bilinear
+from brightness import adjust_brightness
+from contrast import adjust_contrast_correctly
 
 class Aplikacija:
 
@@ -31,7 +32,7 @@ class Aplikacija:
 
         self.contrastSlide = Scale(tool_bar, from_=0, to=100, tickinterval=50, orient=   HORIZONTAL, label='Contrast')
         self.contrastSlide.grid(row=4, column=0, padx=5, pady=5)
-        self.contrastSlide.bind("<ButtonRelease-1>", self.obradi_promenu_vrednosti)
+        self.contrastSlide.bind("<ButtonRelease-1>", self.primeni_contrast)
 
         self.warmthSlide = Scale(tool_bar, from_=0, to=100, tickinterval=50, orient=   HORIZONTAL, label='Warmth')
         self.warmthSlide.grid(row=5, column=0, padx=5, pady=5)
@@ -87,7 +88,7 @@ class Aplikacija:
 
     def obradi_promenu_vrednosti(self, event):
         print(self.adjustSlide.get())
-        tmp = adjust.rotate_image_bilinear(self.imageArray, self.adjustSlide.get())
+        tmp = rotate_image_bilinear(self.imageArray, self.adjustSlide.get())
         print(type(tmp))
         newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
         self.image = newImage
@@ -96,7 +97,7 @@ class Aplikacija:
 
     def primeni_adjust(self, event):
         print(self.adjustSlide.get())
-        tmp = adjust.rotate_image_bilinear(self.originalImageArray, self.adjustSlide.get())
+        tmp = rotate_image_bilinear(self.originalImageArray, self.adjustSlide.get())
         print(type(tmp))
         newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
         self.image = newImage
@@ -105,7 +106,16 @@ class Aplikacija:
         
     def primeni_brightness(self, event):
         print(self.brightSlide.get())
-        tmp = brightness.adjust_brightness(self.filteredImageArray, self.brightSlide.get())
+        tmp = adjust_brightness(self.filteredImageArray, self.brightSlide.get())
+        print(type(tmp))
+        newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
+        self.image = newImage
+        self.imageArray = tmp
+        Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
+
+    def primeni_contrast(self, event):
+        print(self.contrastSlide.get())
+        tmp = adjust_contrast_correctly(self.filteredImageArray, self.contrastSlide.get())
         print(type(tmp))
         newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
         self.image = newImage
