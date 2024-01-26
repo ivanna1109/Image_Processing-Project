@@ -96,30 +96,24 @@ class Aplikacija:
         Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
 
     def primeni_adjust(self, event):
-        print(self.adjustSlide.get())
         tmp = rotate_image_bilinear(self.originalImageArray, self.adjustSlide.get())
-        print(type(tmp))
-        newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
-        self.image = newImage
+        self.image = ImageTk.PhotoImage(image=Image.fromarray(tmp))
         self.filteredImageArray = tmp
+        print("Adjust done.")
         Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
         
     def primeni_brightness(self, event):
-        print(self.brightSlide.get())
         tmp = adjust_brightness(self.filteredImageArray, self.brightSlide.get())
-        print(type(tmp))
-        newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
-        self.image = newImage
+        self.image = ImageTk.PhotoImage(image=Image.fromarray(tmp))
         self.imageArray = tmp
+        print("Brightness done.")
         Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
 
     def primeni_contrast(self, event):
-        print(self.contrastSlide.get())
         tmp = adjust_contrast_correctly(self.filteredImageArray, self.contrastSlide.get())
-        print(type(tmp))
-        newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
-        self.image = newImage
+        self.image = ImageTk.PhotoImage(image=Image.fromarray(tmp))
         self.imageArray = tmp
+        print("Contrast done.")
         Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
         
 
