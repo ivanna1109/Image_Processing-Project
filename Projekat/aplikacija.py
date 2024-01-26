@@ -19,6 +19,7 @@ class Aplikacija:
         nova_tk_slika = ImageTk.PhotoImage(nova_slika)
         self.slika_labela.configure(image=nova_tk_slika)
         self.slika_labela.image = nova_tk_slika
+        print("vlaDkoNJina")
 
     def obradi_sliku(self):
         print("Kliknuli smo na apply filter")
