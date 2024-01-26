@@ -47,6 +47,7 @@ def rotate_image_bilinear(image, angle):
     
     return cropped_image
 
+"""
 path = r'D:\_PMF\_IntroductionToImageProcessing\Project\Image_Processing-Project\Image_Processing-Project\ProjekatIIP\src\images\building.jpg' 
 img = plt.imread(path)
 img = np.array(img)
@@ -55,3 +56,4 @@ plt.imshow(rotated_img)
 # plt.imshow(img)
 plt.show()
 print(rotated_img)
+"""

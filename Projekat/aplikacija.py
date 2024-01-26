@@ -1,5 +1,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
+import numpy as np
+import adjust
 
 class Aplikacija:
     def __init__(self, root, o_image):
@@ -8,7 +10,7 @@ class Aplikacija:
         self.prozor.geometry('900x650')
         self.left_frame = Frame(root, width=500, height=600, bg='grey')
         self.left_frame.grid(row=0, column=0, padx=10, pady=5)
-
+        self.originalImage = o_image
 
 
         tool_bar = Frame(self.left_frame, width=250, height=500)
@@ -18,7 +20,7 @@ class Aplikacija:
 
         self.adjustSlide = Scale(tool_bar, from_=-25, to=25, tickinterval=50, orient=HORIZONTAL, label='Adjust')
         self.adjustSlide.grid(row=2, column=0, padx=5, pady=5)
-        self.adjustSlide.bind("<ButtonRelease-1>", self.obradi_promenu_vrednosti)
+        self.adjustSlide.bind("<ButtonRelease-1>", self.obradi_promenu_adjust)
 
         self.brightSlide = Scale(tool_bar, from_=0, to=100, tickinterval=50, orient=   HORIZONTAL, label='Brighteness')
         self.brightSlide.grid(row=3, column=0, padx=5, pady=5)
@@ -68,19 +70,34 @@ class Aplikacija:
         self.sharpenB.grid(row=8, column=1, padx=2, pady=(2,0), ipadx=20)
         self.sharpenB.bind("<Button-1>", self.obradi_promenu_vrednosti)
         
-
-        
-        right_frame =    Frame(root, width=650, height=400, bg='black')
-        right_frame.grid(row=0, column=2, padx=10, pady=5)
+        self.right_frame = Frame(root, width=650, height=400, bg='black')
+        self.right_frame.grid(row=0, column=2, padx=10, pady=5)
         self.image = ImageTk.PhotoImage(o_image)
         #Right frame
-        Label(right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
+        Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
+    
+        """
         Label(right_frame, image=self.image).grid(row=0,column=2, padx=5, pady=5)
         Label(right_frame, image=self.image).grid(row=2,column=0, padx=5, pady=5)
         Label(right_frame, image=self.image).grid(row=2,column=2, padx=5, pady=5)
+        """
 
     def obradi_promenu_vrednosti(self, event):
         print(self.adjustSlide.get())
+        tmp = adjust.rotate_image_bilinear(np.array(self.originalImage), self.adjustSlide.get())
+        print(type(tmp))
+        newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
+        self.image = newImage
+        Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
+
+    def obradi_promenu_adjust(self, event):
+        print(self.adjustSlide.get())
+        tmp = adjust.rotate_image_bilinear(np.array(self.originalImage), self.adjustSlide.get())
+        print(type(tmp))
+        newImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
+        self.image = newImage
+        Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
+        
 
     def primeni_filter(self):
         nova_slika = self.obradi_sliku()
