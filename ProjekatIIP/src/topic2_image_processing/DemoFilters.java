@@ -89,11 +89,11 @@ public class DemoFilters implements Drawing {
 		Image filteredImage = filter.process(originalImage);
 		view.drawImageCentered(Vector.ZERO, applyFilter ? filteredImage : originalImage);
 		view.drawImageCentered(Vector.ZERO.add(new Vector(originalImage.getWidth(), originalImage.getHeight()/3)), applyFilter ? 
-				new Zoom(0.6).process(new RedHistogram().getRedHistogram(filteredImage)) : new Zoom(0.6).process(new RedHistogram().getRedHistogram(originalImage)));
+				new RedHistogram().getRedHistogram(filteredImage) : new RedHistogram().getRedHistogram(originalImage));
 		view.drawImageCentered(Vector.ZERO.add(new Vector(originalImage.getWidth(), 0)), applyFilter ? 
-				new Zoom(0.6).process(new GreenHistogram().getGreenHistogram(filteredImage)) : new Zoom(0.6).process(new GreenHistogram().getGreenHistogram(originalImage)));
+				new GreenHistogram().getGreenHistogram(filteredImage) : new GreenHistogram().getGreenHistogram(originalImage));
 		view.drawImageCentered(Vector.ZERO.add(new Vector(originalImage.getWidth(), -originalImage.getHeight()/3)), applyFilter ? 
-				new Zoom(0.6).process(new BlueHistogram().getBlueHistogram(filteredImage)) : new Zoom(0.6).process(new BlueHistogram().getBlueHistogram(originalImage)));
+				new BlueHistogram().getBlueHistogram(filteredImage) : new BlueHistogram().getBlueHistogram(originalImage));
 		
 		DrawingUtils.drawInfoText(view, "Image: " + fileNames[imageIndex] + "   Filter: " + filter.getClass().getSimpleName());
 	}

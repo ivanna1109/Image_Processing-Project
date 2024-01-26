@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 
 public class RedHistogram {
 	
-	public Image getRedHistogram(Image img) {
+	public WritableImage getRedHistogram(Image img) {
 		
 		int[] redBins = new int[256];
 		PixelReader pr = img.getPixelReader();
@@ -26,14 +26,17 @@ public class RedHistogram {
 			}
 		}
 		
-		WritableImage output = new WritableImage(256, maxRed/120);
+		WritableImage output = new WritableImage(256, 100);
 		PixelWriter pw = output.getPixelWriter();
-		
-		for(int x = 0; x < 256; x++) {
-			for(int i = 0; i < redBins[x]/120; i++) {
-				pw.setColor(x, maxRed/120 - i - 1, Color.hsb(0, 1.0, 1.0));				
-			} 
+		for(int i = 0; i < redBins.length; i++) {
+			
+			int scaled = (int) (100.0 * redBins[i] / maxRed);
+			
+			for(int j = 0; j < scaled; j++) {
+				pw.setColor(i, 100 - j - 1, Color.RED);
+			}
 		}
+		
 		return output;
 	}
 }
