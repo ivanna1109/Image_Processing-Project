@@ -1,10 +1,10 @@
-import tkinter as tk
+from tkinter import *
 from load_images import load_image
 from aplikacija import Aplikacija
 
 
 def main():
-    root = tk.Tk()
+    root = Tk()
     app= Aplikacija(root, load_image('images/lena.tif'))
     root.mainloop()
 
