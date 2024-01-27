@@ -3,7 +3,7 @@ import numpy as np
 def highlights_filter(image, coef):
     image = np.array(image, dtype=np.float32)
 
-    threshold = 200
+    threshold = 180
     highlights = image > threshold
 
     image[highlights] += (255 - image[highlights]) * coef
