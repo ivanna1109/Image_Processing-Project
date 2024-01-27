@@ -25,7 +25,6 @@ def hist_to_image(image_array):
     histogramR_image = Image.new("RGB", (width, height), "white")
     histogramG_image = Image.new("RGB", (width, height), "white")
     histogramB_image = Image.new("RGB", (width, height), "white")
-
     drawR = ImageDraw.Draw(histogramR_image)
     drawG = ImageDraw.Draw(histogramG_image)
     drawB = ImageDraw.Draw(histogramB_image)

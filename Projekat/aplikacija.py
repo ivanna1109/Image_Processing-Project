@@ -8,17 +8,20 @@ from contrast import adjust_contrast_correctly
 from warmth import warmth_filter
 from saturation import saturation
 from zoom import zoom_image
+from sharpen import sharpen_image
+from tiltShift import radial_tilt_shift, linear_tilt_shift
 
 class Aplikacija:
 
     def __init__(self, root, o_image):
         self.prozor = root
         self.prozor.title("Uvod u procesiranje slike - Projekat")
-        self.prozor.geometry('1380x650')
+        self.prozor.geometry('1450x650') #width x height
         self.left_frame = Frame(root, width=500, height=600, bg='grey')
         self.left_frame.grid(row=0, column=0, padx=10, pady=5)
         self.originalImage = o_image
         self.originalImageArray = np.array(o_image)
+        print(self.originalImageArray.shape)
         self.histogramRoriginal, self.histogramGoriginal, self.histogramBoriginal = hist_to_image(self.originalImageArray)
         self.filteredImage = o_image
         self.filteredImageArray = np.array(o_image)
@@ -32,9 +35,7 @@ class Aplikacija:
         self.adjustSlide = Scale(tool_bar, from_=-25, to=25, tickinterval=50, orient=HORIZONTAL, label='Adjust')
         self.adjustSlide.grid(row=2, column=0, padx=5, pady=5)
         self.clicked_adjust = False
-        self.adjustSlide.bind("<ButtonPress-1>", self.slider_adjust_pressed)
-        self.adjustSlide.bind("<ButtonRelease-1>", self.slider_adjust_released)
-        self.adjustSlide.bind("<Motion>", self.primeni_adjust)
+        self.adjustSlide.bind("<ButtonRelease-1>", self.primeni_adjust)
 
         #Brightness
         self.brightSlide = Scale(tool_bar, from_=-50, to=50, tickinterval=100, orient= HORIZONTAL, label='Brighteness')
@@ -100,28 +101,28 @@ class Aplikacija:
         #Tile Shift - Linear
         self.tileShihtLB = Button(tool_bar, text="Apply Linear TS",  width=6, height=1, borderwidth=5)
         self.tileShihtLB.grid(row=7, column=1, padx=2, pady=2, ipadx=20)
-        self.tileShihtLB.bind("<Button-1>", self.obradi_promenu_vrednosti)
+        self.tileShihtLB.bind("<Button-1>", self.primeni_linear_TS)
 
         #Tile Shift - Radial
         self.tileShihtRB = Button(tool_bar, text="Apply Radial TS",  width=6, height=1, borderwidth=5)
         self.tileShihtRB.grid(row=8, column=1, padx=2, pady=2, ipadx=20)
-        self.tileShihtRB.bind("<Button-1>", self.obradi_promenu_vrednosti)
+        self.tileShihtRB.bind("<Button-1>", self.primeni_radial_TS)
 
         #Sharpen
         self.sharpenB = Button(tool_bar, text="Apply Sharpen", width=6, height=1, borderwidth=5)
         self.sharpenB.grid(row=10, column=1, padx=2, pady=(2,0), ipadx=20)
-        self.sharpenB.bind("<Button-1>", self.obradi_promenu_vrednosti)
+        self.sharpenB.bind("<Button-1>", self.primeni_sharpen)
         
-        self.right_frame = Frame(root, width=650, height=400, bg='black')
+        #Right frame
+        self.right_frame = Frame(root, width=650, height=400, bg='white')
         self.right_frame.grid(row=0, column=2, padx=10, pady=5)
         self.image = ImageTk.PhotoImage(o_image)
         
         self.histRImage = ImageTk.PhotoImage(self.histogramRoriginal)
         self.histGImage = ImageTk.PhotoImage(self.histogramGoriginal)
         self.histBImage = ImageTk.PhotoImage(self.histogramBoriginal)
-        #Right frame
-        Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
         
+        Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
         Label(self.right_frame, image=self.histRImage).grid(row=0,column=2, padx=5, pady=5)
         Label(self.right_frame, image=self.histGImage).grid(row=0,column=4, padx=5, pady=5)
         Label(self.right_frame, image=self.histBImage).grid(row=0,column=6, padx=5, pady=5)
@@ -135,20 +136,12 @@ class Aplikacija:
     def obradi_promenu_vrednosti():
         pass
 
-    #Adjust
-    def slider_adjust_pressed(self, event):
-        self.clicked_adjust = True       
-            
-    def slider_adjust_released(self, event):
-        self.clicked_adjust = False
-
     def primeni_adjust(self, event):
-        if self.clicked_adjust:
-            tmp = rotate_image_bilinear(self.originalImageArray, self.adjustSlide.get())
-            self.filteredImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
-            self.filteredImageArray = tmp
-            print("Adjust done.")
-            self.set_filtered_image()
+        tmp = rotate_image_bilinear(self.originalImageArray, self.adjustSlide.get())
+        self.filteredImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
+        self.filteredImageArray = tmp
+        print("Adjust done.")
+        self.set_filtered_image()
 
     #Bright
     def slider_bright_pressed(self, event):
@@ -215,6 +208,29 @@ class Aplikacija:
             self.filteredImageArray = tmp
             print("Zoom done.")
             self.set_filtered_image()
+
+    #Linear TS
+    def primeni_linear_TS(self, event):
+        tmp = linear_tilt_shift(self.originalImageArray)
+        self.filteredImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
+        self.filteredImageArray = tmp
+        print("Linear TS done.")
+        self.set_filtered_image()      
+
+    #Radial TS
+    def primeni_radial_TS(self, event):
+        tmp = radial_tilt_shift(self.originalImageArray)
+        self.filteredImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
+        self.filteredImageArray = tmp
+        print("Radial TS done.")
+        self.set_filtered_image()       
+
+    def primeni_sharpen(self, event):
+        tmp =  sharpen_image(self.originalImageArray)
+        self.filteredImage = ImageTk.PhotoImage(image=Image.fromarray(tmp))
+        self.filteredImageArray = tmp
+        print("Sharpend done.")
+        self.set_filtered_image()
         
     def set_filtered_image(self):
         self.histogramRofiltered, self.histogramGfiltered, self.histogramBfiltered = hist_to_image(self.filteredImageArray)
