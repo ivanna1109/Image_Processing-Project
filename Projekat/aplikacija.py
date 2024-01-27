@@ -1,20 +1,26 @@
 from tkinter import *
 from PIL import Image, ImageTk
 import numpy as np
+#from histograms import histrogram_of_image
 from adjust import rotate_image_bilinear
 from brightness import adjust_brightness
 from contrast import adjust_contrast_correctly
+from zoom import zoom_image
 
 class Aplikacija:
 
     def __init__(self, root, o_image):
         self.prozor = root
         self.prozor.title("Uvod u procesiranje slike - Projekat")
-        self.prozor.geometry('900x650')
+        self.prozor.geometry('920x650')
         self.left_frame = Frame(root, width=500, height=600, bg='grey')
         self.left_frame.grid(row=0, column=0, padx=10, pady=5)
         self.originalImage = o_image
         self.originalImageArray = np.array(o_image)
+        #histrogram_of_image(self.originalImageArray)
+        self.originalHistogram = Image.open('histograms/originalHistogram.png') #ovde histogram originalne slike i to se ne menja
+        self.filteredImage = None
+        self.filteredHistogram  = None
         self.filteredImageArray = np.array(o_image)
 
         tool_bar = Frame(self.left_frame, width=250, height=500)
@@ -54,9 +60,9 @@ class Aplikacija:
         self.shadowSlide.grid(row=3, column=1, padx=5, pady=5)
         self.shadowSlide.bind("<ButtonRelease-1>", self.obradi_promenu_vrednosti)
 
-        self.zoonSlide = Scale(tool_bar, from_=0, to=10, tickinterval=10, orient=HORIZONTAL, label='Zoom')
+        self.zoonSlide = Scale(tool_bar, from_=1, to=10, tickinterval=10, orient=HORIZONTAL, label='Zoom')
         self.zoonSlide.grid(row=4, column=1, padx=2, pady=2)
-        self.zoonSlide.bind("<ButtonRelease-1>", self.obradi_promenu_vrednosti)
+        self.zoonSlide.bind("<ButtonRelease-1>", self.primeni_zoom)
 
         self.vignetteB = Button(tool_bar, text="Apply Vignette", width=6, height=1, borderwidth=5)
         self.vignetteB.grid(row=5, column=1, padx=2, pady=(0, 2), ipadx=20)
@@ -77,14 +83,13 @@ class Aplikacija:
         self.right_frame = Frame(root, width=650, height=400, bg='black')
         self.right_frame.grid(row=0, column=2, padx=10, pady=5)
         self.image = ImageTk.PhotoImage(o_image)
+        self.histImage = ImageTk.PhotoImage(self.originalHistogram)
         #Right frame
         Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
-    
+        Label(self.right_frame, image=self.histImage).grid(row=0,column=2, padx=5, pady=5)
         """
-        Label(right_frame, image=self.image).grid(row=0,column=2, padx=5, pady=5)
-        Label(right_frame, image=self.image).grid(row=2,column=0, padx=5, pady=5)
-        Label(right_frame, image=self.image).grid(row=2,column=2, padx=5, pady=5)
-        """
+        Label(self.right_frame, image=self.filteredImage).grid(row=2,column=0, padx=5, pady=5)
+        Label(self.right_frame, image=self.filteredHistogram).grid(row=2,column=2, padx=5, pady=5)"""
 
     def obradi_promenu_vrednosti(self, event):
         print(self.adjustSlide.get())
@@ -114,6 +119,14 @@ class Aplikacija:
         self.image = ImageTk.PhotoImage(image=Image.fromarray(tmp))
         self.imageArray = tmp
         print("Contrast done.")
+        Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
+
+    def primeni_zoom(self, event):
+        print(self.zoonSlide.get())
+        tmp = zoom_image(self.originalImage, self.zoonSlide.get())
+        self.image = ImageTk.PhotoImage(image=Image.fromarray(tmp))
+        self.imageArray = tmp
+        print("Zoom done.")
         Label(self.right_frame, image=self.image).grid(row=0,column=0, padx=5, pady=5)
         
 
