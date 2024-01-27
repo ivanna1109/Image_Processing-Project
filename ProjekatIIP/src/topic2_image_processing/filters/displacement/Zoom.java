@@ -12,6 +12,8 @@ public class Zoom extends DisplacementFilter {
 	
 	
 	public Zoom(double k) {
+		if(k < 1) k = 1;
+		if(k > 10) k = 10;
 		this.k = k;
 	}
 	

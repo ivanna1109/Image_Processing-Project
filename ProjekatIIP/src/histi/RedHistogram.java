@@ -37,6 +37,8 @@ public class RedHistogram {
 			}
 		}
 		
+		
+		
 		return output;
 	}
 }

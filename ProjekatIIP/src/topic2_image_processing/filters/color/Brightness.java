@@ -9,6 +9,8 @@ public class Brightness extends ColorFilter {
 	double brightnessFactor;
 	
 	public Brightness(double bf) {
+		if(bf > 1.0) bf = 1.0;
+		if(bf < 0.0) bf = 0.0;
 		this.brightnessFactor = bf;
 	}
 	
