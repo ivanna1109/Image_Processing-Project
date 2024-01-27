@@ -1,12 +1,18 @@
 import numpy as np
 
 def hist(img):
-    hist_img = np.zeros(256)
+    hist_red = np.zeros(256)
+    hist_green = np.zeros(256)
+    hist_blue = np.zeros(256)
+
     for i in range(img.shape[0]):
         for j in range(img.shape[1]):
-            hist_img[img[i,j]] += 1
-    
-    return hist_img
+            pxl = img[i,j]
+            hist_red[pxl[0]] += 1
+            hist_green[pxl[1]] += 1
+            hist_blue[pxl[2]] += 1
+
+    return hist_red, hist_green, hist_blue
 
 
 if __name__ == '__main__':
@@ -17,5 +23,7 @@ if __name__ == '__main__':
     img = np.array(img)
     hist_img = hist(img)
 
-    plt.bar(range(256), hist_img)
+    plt.bar(range(256), hist_img[0], color='r')
+    plt.bar(range(256), hist_img[1], color='g')
+    plt.bar(range(256), hist_img[2], color='b')
     plt.show()
