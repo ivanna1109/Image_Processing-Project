@@ -1,19 +1,20 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-def adjust_brightness(image, brightness):
-    brightness_adjustment = (brightness / 100.0) * 255
-    adjusted_image = image + brightness_adjustment
-    adjusted_image = np.clip(adjusted_image, 0, 255)
+def brightness(image, factor):
+    '''
+    `factor` \in [0, 100]
+    '''
+    per_pxl_adj = (factor / 100.0) * 255
+    brighter_img = image + per_pxl_adj
     
-    return adjusted_image.astype(np.uint8)
+    return np.clip(brighter_img, 0, 255).astype(np.uint8)
 
 if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+    
     path = r'D:\_PMF\_IntroductionToImageProcessing\Project\Image_Processing-Project\Image_Processing-Project\ProjekatIIP\src\images\building.jpg' 
     img = plt.imread(path)
     img = np.array(img)
-    rotated_img = adjust_brightness(img, -55)
-    plt.imshow(rotated_img)
-    # plt.imshow(img)
+    res = brightness(img, 55)
+    plt.imshow(res)
     plt.show()
-    # print(rotated_img)
