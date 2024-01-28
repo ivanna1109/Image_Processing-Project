@@ -2,18 +2,18 @@ from tkinter import *
 from PIL import Image, ImageTk
 import numpy as np
 from histogram import hist_to_image
-from adjust import rotate_image_bilinear
-from brightness import adjust_brightness
-from contrast import adjust_contrast_correctly
-from warmth import warmth_filter
-from saturation import saturation
-from fade import fade_filter
-from highlights import highlights_filter
-from shadows import shadows_filter
-from vignette import vignette_filter
-from zoom import zoom_image
-from sharpen import sharpen_image
-from tiltShift import radial_tilt_shift, linear_tilt_shift
+from filters.adjust import rotate_image_bilinear
+from filters.brightness import adjust_brightness
+from filters.contrast import adjust_contrast_correctly
+from filters.warmth import warmth_filter
+from filters.saturation import saturation
+from filters.fade import fade_filter
+from filters.highlights import highlights_filter
+from filters.shadows import shadows_filter
+from filters.vignette import vignette_filter
+from filters.zoom import zoom_image
+from filters.sharpen import sharpen_image
+from filters.tiltShift import radial_tilt_shift, linear_tilt_shift
 
 class Aplikacija:
 
@@ -173,7 +173,7 @@ class Aplikacija:
         self.shadowSlide.set(0)
         self.zoonSlide.set(1)
         self.vignetteSlide.set(0)
-        
+
     #-----------------------------------------------------------------------FILTERI--------------------------------------------------------------
     #Adjust
     def primeni_adjust(self, event):

@@ -5,7 +5,7 @@ from aplikacija import Aplikacija
 
 def main():
     root = Tk()
-    app= Aplikacija(root, load_image('images/ivi.jpg'))
+    app= Aplikacija(root, load_image('images/building.jpg'))
     root.mainloop()
 
 if __name__ == '__main__':
