@@ -21,7 +21,10 @@ public class Zoom extends DisplacementFilter {
 	@Override
 	public Vector source(Vector dst, Vector dim) {
 		// Delimo obe koordinate vektora sa k.
-		return dst.div(k);
+		Vector center = dim.div(2);
+		Vector translation = dst.sub(center);
+		Vector scaled = translation.div(k);
+		return scaled.add(center);
 	}
 	
 }

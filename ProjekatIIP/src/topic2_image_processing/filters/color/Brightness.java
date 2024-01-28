@@ -10,16 +10,21 @@ public class Brightness extends ColorFilter {
 	
 	public Brightness(double bf) {
 		if(bf > 1.0) bf = 1.0;
-		if(bf < 0.0) bf = 0.0;
+		if(bf < -1.0) bf = -1.0;
 		this.brightnessFactor = bf;
 	}
 	
 	@Override
 	public Color processColor(Color input) {
 		double b = input.getBrightness();
-		return Color.hsb(input.getHue(), 
-						 input.getSaturation(),
-						 b + (1 - b) * brightnessFactor);
+		if(brightnessFactor >= 0.0 && brightnessFactor <= 1.0)
+			return Color.hsb(input.getHue(), 
+					 input.getSaturation(),
+					 b + (1 - b) * brightnessFactor);
+		else
+			return Color.hsb(input.getHue(), 
+					 input.getSaturation(),
+					 b * (1 - Math.abs(brightnessFactor)));
 	}
 
 }

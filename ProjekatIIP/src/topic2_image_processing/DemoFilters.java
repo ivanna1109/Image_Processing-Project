@@ -49,16 +49,13 @@ public class DemoFilters implements Drawing {
 	Boolean applyFilter = false;
 	
 	@GadgetDouble(min = -25.0, max = 25.0)
-	Double rotate = 10.0;
+	Double rotationAngle = 10.0;
+	
+	@GadgetDouble(min = -1.0, max = 1.0)
+	Double brightnessSaturationFactor = 0.5;
 	
 	@GadgetDouble(min = 0.0, max = 1.0)
 	Double factor = 0.5;
-	
-	@GadgetInteger(min = 1, max = 10)
-	Integer zoomCoef = 2;
-	
-	@GadgetDouble(min = 0.0, max = 1.0)
-	Double treshold = 0.5;
 	
 	@GadgetInteger(min = 0, max = 255)
 	Integer warmth = 30;
@@ -66,8 +63,15 @@ public class DemoFilters implements Drawing {
 	@GadgetInteger(min = 0, max = 255)
 	Integer cold = 30;
 	
+	@GadgetDouble(min = 0.0, max = 1.0)
+	Double highlightsShadowsTreshold = 0.5;
+	
 	@GadgetInteger(min = 0, max = 1)
 	Integer tiltShiftIndex = 0;
+	
+	@GadgetInteger(min = 1, max = 10)
+	Integer zoomCoef = 2;
+		
 	
 	String[] fileNames = {
 			"monalisa.png",
@@ -90,15 +94,15 @@ public class DemoFilters implements Drawing {
 	public void draw(View view) {
 		DrawingUtils.clear(view, Color.hsb(0, 0, 0.2));
 		Filter[] filters = {
-				new Adjust(rotate),
-				new Brightness(factor),
+				new Adjust(rotationAngle),
+				new Brightness(brightnessSaturationFactor),
 				new Contrast(1 + factor),
 				new Warmth(warmth, cold),
-				new Saturate(factor),
+				new Saturate(brightnessSaturationFactor),
 				new Fade(factor),
 				new Vignette(),
-				new Highlights(factor, treshold), // probati za 0.3 i 0.7
-				new Shadows(factor, treshold), // probati za 0.7 i 0.3
+				new Highlights(factor, highlightsShadowsTreshold), // probati za 0.3 i 0.7
+				new Shadows(factor, highlightsShadowsTreshold), // probati za 0.7 i 0.3
 				new TiltShift(TiltShift.BLUR_5x5, 0), // 0 je radial, 1 je linear
 				new ConvolutionFilter(ConvolutionFilter.SHARPEN),
 				new Zoom(zoomCoef)
@@ -107,7 +111,10 @@ public class DemoFilters implements Drawing {
 		Filter filter = filters[filterIndex];
 		Image originalImage = new Image("images/" + fileNames[imageIndex]);
 		Image filteredImage = filter.process(originalImage);
-		view.drawImageCentered(Vector.ZERO, applyFilter ? filteredImage : originalImage);
+		if(filterIndex == 0)
+			view.drawImageCentered(Vector.ZERO, applyFilter ? new Zoom(Math.abs(0.65/25 * rotationAngle) + 1).process(filteredImage) : originalImage);
+		else
+			view.drawImageCentered(Vector.ZERO, applyFilter ? filteredImage : originalImage);
 		view.drawImageCentered(Vector.ZERO.add(new Vector(originalImage.getWidth(), originalImage.getHeight()/3)), applyFilter ? 
 				new RedHistogram().getRedHistogram(filteredImage) : new RedHistogram().getRedHistogram(originalImage));
 		view.drawImageCentered(Vector.ZERO.add(new Vector(originalImage.getWidth(), 0)), applyFilter ? 
