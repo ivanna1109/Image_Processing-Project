@@ -181,7 +181,7 @@ class Aplikacija:
         self.vignetteSlide.set(0)
 
     def undo_filter(self, event):
-        print(len(self.filters_list))
+        print(f'Velicina stacka: {len(self.filters_list)}')
         if len(self.filters_list) == 0:
             return
         elif len(self.filters_list) == 1:
@@ -191,19 +191,26 @@ class Aplikacija:
             forRemove = self.filters_list.pop()
             curr_image_array = self.filters_list[-1][0]
         if len(forRemove) == 3:
-            forRemove[1].set(0)
-            forRemove[2].set(0)
-        else:
+            if (forRemove[2] == 'zoom'):
+                forRemove[1].set(0)
+            else:
+                forRemove[1].set(0)
+                forRemove[2].set(0)
+        elif len(forRemove)==2:
             forRemove[1].set(0)
         self.filteredImageArray = curr_image_array
         self.filteredImage = Image.fromarray(curr_image_array)
         print("Undo successful.")
+        print(f'Velicina stacka nakon brisanja: {len(self.filters_list)}')
         self.set_filtered_image()
 
     #-----------------------------------------------------------------------FILTERI--------------------------------------------------------------
     #Adjust
     def primeni_adjust(self, event):
-        tmp = rotate_image_bilinear(self.filteredImageArray, self.adjustSlide.get())
+        if len(self.filters_list) == 0:
+            tmp = rotate_image_bilinear(self.originalImageArray, self.adjustSlide.get())
+        else:
+            tmp = rotate_image_bilinear(self.filteredImageArray, self.adjustSlide.get())
         self.filteredImage = Image.fromarray(tmp)
         self.filteredImageArray = tmp
         self.filters_list.append((tmp, self.adjustSlide))
@@ -220,7 +227,10 @@ class Aplikacija:
 
     def primeni_brightness(self, event):
         if self.clicked_bright:
-            tmp = adjust_brightness(self.filteredImageArray, self.brightSlide.get())
+            if len(self.filters_list) == 0:
+                tmp = adjust_brightness(self.originalImageArray, self.brightSlide.get())
+            else:
+                tmp = adjust_brightness(self.filteredImageArray, self.brightSlide.get())
             self.filteredImage = Image.fromarray(tmp)
             self.filteredImageArray = tmp
             print("Brightness done.")
@@ -236,7 +246,10 @@ class Aplikacija:
     
     def primeni_contrast(self, event):
         if self.clicked_contrast:
-            tmp = adjust_contrast_correctly(self.filteredImageArray, self.contrastSlide.get())
+            if len(self.filters_list) == 0:
+                tmp = adjust_contrast_correctly(self.originalImageArray, self.contrastSlide.get())
+            else:
+                tmp = adjust_contrast_correctly(self.filteredImageArray, self.contrastSlide.get())
             self.filteredImage = Image.fromarray(tmp)
             self.filteredImageArray = tmp
             print("Contrast done.")
@@ -252,8 +265,11 @@ class Aplikacija:
 
     def primeni_saturation(self, event):
         if self.clicked_saturation:
-            tmp =  saturation(self.filteredImageArray, self.saturationSlide.get())
-            self.filteredImage = Image.fromarray((tmp, self.saturationSlide))
+            if len(self.filters_list) == 0:
+                tmp =  saturation(self.originalImageArray, self.saturationSlide.get())
+            else:
+                tmp =  saturation(self.filteredImageArray, self.saturationSlide.get())
+            self.filteredImage = Image.fromarray(tmp)
             self.filteredImageArray = tmp
             print("Saturation done.")
             self.set_filtered_image()
@@ -262,12 +278,15 @@ class Aplikacija:
         self.clicked_zoom = True       
             
     def slider_zoom_released(self, event):
-        self.filters_list.append((self.filteredImageArray, self.zoonSlide))
+        self.filters_list.append((self.filteredImageArray, self.zoonSlide, 'zoom'))
         self.clicked_zoom = False
     
     def primeni_zoom(self, event):
         if self.clicked_zoom:
-            tmp = zoom_image(self.filteredImage, self.zoonSlide.get())
+            if len(self.filters_list) == 0:
+                tmp = zoom_image(self.originalImage, self.zoonSlide.get())
+            else:
+                tmp = zoom_image(self.filteredImage, self.zoonSlide.get())
             self.filteredImage = Image.fromarray(tmp)
             self.filteredImageArray = tmp
             print("Zoom done.")
@@ -275,10 +294,13 @@ class Aplikacija:
 
     #Warmth
     def primeni_warmth(self, event):
-        tmp =  warmth_filter(self.filteredImageArray, self.warmthSlideR.get(), self.warmthSlideB.get())
+        if len(self.filters_list) == 0:
+            tmp =  warmth_filter(self.originalImageArray, self.warmthSlideR.get(), self.warmthSlideB.get())
+        else:
+            tmp =  warmth_filter(self.filteredImageArray, self.warmthSlideR.get(), self.warmthSlideB.get())
         self.filteredImage = Image.fromarray(tmp)
         self.filteredImageArray = tmp
-        self.filters_list.append((tmp, self.warmthSlideR, self.warmthSlideR))
+        self.filters_list.append((tmp, self.warmthSlideR, self.warmthSlideB))
         print("Warmth done.")
         self.set_filtered_image()
 
@@ -292,7 +314,10 @@ class Aplikacija:
 
     def primeni_fade(self, event):
         if self.clicked_fade:
-            tmp =  fade_filter(self.filteredImageArray, self.fadeSlide.get())
+            if len(self.filters_list) == 0:
+                tmp =  fade_filter(self.originalImageArray, self.fadeSlide.get())
+            else:
+                tmp =  fade_filter(self.filteredImageArray, self.fadeSlide.get())
             self.filteredImage = Image.fromarray(tmp)
             self.filteredImageArray = tmp
             print("Fade done.")
@@ -308,7 +333,10 @@ class Aplikacija:
 
     def primeni_highlight(self, event):
         if self.clicked_highlight:
-            tmp =  highlights_filter(self.filteredImageArray, self.hightSlide.get())
+            if len(self.filters_list) == 0:
+                tmp =  highlights_filter(self.originalImageArray, self.hightSlide.get())
+            else:
+                tmp =  highlights_filter(self.filteredImageArray, self.hightSlide.get())
             self.filteredImage = Image.fromarray(tmp)
             self.filteredImageArray = tmp
             print("Hightlights done.")
@@ -324,7 +352,10 @@ class Aplikacija:
 
     def primeni_shadows(self, event):
         if self.clicked_shadows:
-            tmp =  shadows_filter(self.filteredImageArray, self.shadowSlide.get())
+            if len(self.filters_list) == 0:
+                tmp =  shadows_filter(self.originalImageArray, self.shadowSlide.get())
+            else:
+                tmp =  shadows_filter(self.filteredImageArray, self.shadowSlide.get())
             self.filteredImage = Image.fromarray(tmp)
             self.filteredImageArray = tmp
             print("Shadows done.")
@@ -340,7 +371,10 @@ class Aplikacija:
 
     def primeni_vignette(self, event):
         if self.clicked_vignette:
-            tmp =  vignette_filter(self.filteredImageArray, self.vignetteSlide.get())
+            if len(self.filters_list) == 0:
+                tmp =  vignette_filter(self.originalImageArray, self.vignetteSlide.get())
+            else:
+                tmp =  vignette_filter(self.filteredImageArray, self.vignetteSlide.get())
             self.filteredImage = Image.fromarray(tmp)
             self.filteredImageArray = tmp
             print("Vignette done.")
@@ -366,7 +400,7 @@ class Aplikacija:
 
     def primeni_sharpen(self, event):
         tmp =  sharpen_image(self.filteredImageArray)
-        self.filteredImage = Image.fromarray((tmp,))
+        self.filteredImage = Image.fromarray(tmp)
         self.filteredImageArray = tmp
         self.filters_list.append(tmp)
         print("Sharpen done.")
