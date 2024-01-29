@@ -1,6 +1,9 @@
 import numpy as np
 
-def vignette_filter(image, strength):
+def vignette(image, coef):
+    '''
+    `coef` \in [0, 1]
+    '''
     image = np.array(image, dtype=np.float32)
 
     height, width = image.shape[:2]
@@ -13,7 +16,7 @@ def vignette_filter(image, strength):
     max_dist = np.sqrt(2)
     norm_dist = dist / max_dist
 
-    vignette_mask = 1 - norm_dist**2 * strength
+    vignette_mask = 1 - norm_dist**2 * coef
 
     for i in range(image.shape[2]):
         image[:, :, i] *= vignette_mask
@@ -28,8 +31,8 @@ if __name__ == '__main__':
     path = r'D:\_PMF\_IntroductionToImageProcessing\Project\Image_Processing-Project\Image_Processing-Project\ProjekatIIP\src\images\monalisa.jpg' 
     img = plt.imread(path)
     img = np.array(img)
-    res = vignette_filter(img, 1) # pokreni za strength = 12 (: | ako hoces da povracas, pokreni sa strength = 18 za sliku `waiting`
+    res = vignette(img, 1) # pokreni za strength = 12 (: | ako hoces da povracas, pokreni sa strength = 18 za sliku `waiting`
     plt.imshow(res)
     plt.show()
-    plt.imshow(img)
-    plt.show()
+    # plt.imshow(img)
+    # plt.show()
