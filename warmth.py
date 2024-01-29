@@ -16,6 +16,4 @@ if __name__ == '__main__':
     img = np.array(img)
     res = warmth(img, 50, 50)
     plt.imshow(res)
-    # plt.imshow(img)
     plt.show()
-    # print(rotated_img)
