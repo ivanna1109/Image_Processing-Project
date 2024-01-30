@@ -3,6 +3,8 @@ from PIL import Image
 
 def zoom(image, factor):
     print(type(image))
+    if isinstance(image, np.ndarray):
+        image = Image.fromarray(image)
     new_width = int(image.width * factor)
     new_height = int(image.height * factor)
 
@@ -14,5 +16,7 @@ def zoom(image, factor):
     zoomed_image = transformed_image.crop((left, top, right, bottom))
 
     return np.array(zoomed_image)
+
+
 
 

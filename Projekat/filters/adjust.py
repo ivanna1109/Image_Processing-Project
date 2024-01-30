@@ -1,5 +1,5 @@
 import numpy as np
-from zoom import zoom
+from filters.zoom import zoom
 
 def rotate(image, angle):
     angle_rad = np.radians(angle)

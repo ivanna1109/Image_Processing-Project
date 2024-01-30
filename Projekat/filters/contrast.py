@@ -1,24 +1,24 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-def adjust_contrast_correctly(image, contrast_level):
-
+def contrast(image, contrast_level):
+    '''
+    `contrast_level` \in [0, 100]
+    '''
     factor = (259 * (contrast_level + 255)) / (255 * (259 - contrast_level))
 
-    adjusted_image = 128 + (factor * (image.astype(np.float32) - 128))
-    adjusted_image = np.clip(adjusted_image, 0, 255)
+    image = 128 + (factor * (image.astype(np.float32) - 128))
+    image = np.clip(image, 0, 255)
 
-    return adjusted_image.astype(np.uint8)
+    return image.astype(np.uint8)
 
 if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+
     path = r'D:\_PMF\_IntroductionToImageProcessing\Project\Image_Processing-Project\Image_Processing-Project\ProjekatIIP\src\images\building.jpg' 
     img = plt.imread(path)
     img = np.array(img)
-    rotated_img = adjust_contrast_correctly(img, 120)
-    plt.imshow(rotated_img)
+    res = contrast(img, 55)
+    plt.imshow(res)
     # plt.imshow(img)
     plt.show()
-    # print(rotated_img)
-    # tmp = img.copy()
-    # print(tmp==img)
-    # print(np.all(tmp==img))
+    # print(res)
