@@ -36,12 +36,12 @@ class Aplikacija:
         tool_bar = Frame(self.left_frame, width=250, height=500)
         tool_bar.grid(row=0, column=0, padx=5, pady=5)
 
-        Label(tool_bar, text="Filters", relief=RAISED, width=6, height=1, borderwidth=2).grid(row=0, column=0, padx=20, pady=3, ipadx=50)
+        #Label(tool_bar, text="Filters", relief=RAISED, width=6, height=1, borderwidth=2).grid(row=0, column=0, padx=20, pady=3, ipadx=50)
         self.resetButton = Button(tool_bar, text="Reset", width=6, height=1, borderwidth=2)
         self.resetButton.grid(row = 0, column = 1, padx=20, pady=3, ipadx=50)
         self.resetButton.bind('<ButtonPress-1>', self.reset_defaults)
         self.undoButton = Button(tool_bar, text="Undo", width=6, height=1, borderwidth=2)
-        self.undoButton.grid(row = 1, column = 1, padx=20, pady=3, ipadx=50)
+        self.undoButton.grid(row = 0, column = 0, padx=20, pady=3, ipadx=50)
         self.undoButton.bind('<ButtonPress-1>', self.undo_filter)
 
         #Adjust - Jako sporo radi
@@ -162,9 +162,10 @@ class Aplikacija:
     def reset_defaults(self, event):
         self.filteredImage = self.originalImage
         self.filteredImageArray = self.originalImageArray
-        self.stack = create_stack()
+        self.filters_list = []
         self.set_filtered_image()
         self.set_sliders()
+        print(f"Filters list size: {len(self.filters_list)}")
         print("Reset to defaults.")
 
     def set_sliders(self):
