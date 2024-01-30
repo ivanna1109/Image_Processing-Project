@@ -1,7 +1,7 @@
 import numpy as np
 from PIL import Image
 
-def zoom_image(image, factor):
+def zoom(image, factor):
     print(type(image))
     new_width = int(image.width * factor)
     new_height = int(image.height * factor)
