@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -58,5 +57,3 @@ plt.imshow(rotated_img)
 plt.show()
 print(rotated_img)
 """
-=======
->>>>>>> vladko
