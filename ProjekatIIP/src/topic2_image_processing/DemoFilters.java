@@ -128,7 +128,7 @@ public class DemoFilters implements Drawing {
 	
 	public static void main(String[] args) {
 		Options options = Options.redrawOnEvents();
-		options.drawingSize = new Vector(1500, 1500);
+		options.drawingSize = new Vector(1500, 300);
 		DrawingApplication.launch(options);
 	}
 }
