@@ -1,6 +1,6 @@
 from PIL import Image
 
-def load_image_test(filepath):
+def load_image_2(filepath):
     original = Image.open(filepath) 
     x_shape = original.width //2
     y_shape = original.height //2

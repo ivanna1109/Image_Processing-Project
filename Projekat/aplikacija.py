@@ -21,7 +21,7 @@ class Aplikacija:
     def __init__(self, root, o_image):
         self.prozor = root
         self.prozor.title("Uvod u procesiranje slike - Projekat")
-        self.prozor.geometry('1450x750') #width x height
+        self.prozor.geometry('1500x700') #width x height
         self.left_frame = Frame(root, width=500, height=600, bg='grey')
         self.left_frame.grid(row=0, column=0, padx=10, pady=5)
         self.originalImage = o_image
