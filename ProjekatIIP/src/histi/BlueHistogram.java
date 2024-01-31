@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 
 public class BlueHistogram {
 
-public Image getBlueHistogram(Image img) {
+public WritableImage getBlueHistogram(Image img) {
 		
 		int[] blueBins = new int[256];
 		PixelReader pr = img.getPixelReader();
@@ -26,14 +26,17 @@ public Image getBlueHistogram(Image img) {
 			}
 		}
 		
-		WritableImage output = new WritableImage(256, maxBlue/50);
+		WritableImage output = new WritableImage(256, 100);
 		PixelWriter pw = output.getPixelWriter();
-		
-		for(int x = 0; x < 256; x++) {
-			for(int i = 0; i < blueBins[x]/50; i++) {
-				pw.setColor(x, maxBlue/50 - i - 1, Color.hsb(240, 1.0, 1.0));	
-			} 
+		for(int i = 0; i < blueBins.length; i++) {
+			
+			int scaled = (int) (100.0 * blueBins[i] / maxBlue);
+			
+			for(int j = 0; j < scaled; j++) {
+				pw.setColor(i, 100 - j - 1, Color.BLUE);
+			}
 		}
+		
 		return output;
 	}
 	

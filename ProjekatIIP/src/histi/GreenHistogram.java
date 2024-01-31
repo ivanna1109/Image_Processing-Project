@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 
 public class GreenHistogram {
 
-public Image getGreenHistogram(Image img) {
+public WritableImage getGreenHistogram(Image img) {
 		
 		int[] greenBins = new int[256];
 		PixelReader pr = img.getPixelReader();
@@ -25,15 +25,18 @@ public Image getGreenHistogram(Image img) {
 					maxGreen = greenBins[r];
 			}
 		}
-		
-		WritableImage output = new WritableImage(256, maxGreen/50);
+
+		WritableImage output = new WritableImage(256, 100);
 		PixelWriter pw = output.getPixelWriter();
-		
-		for(int x = 0; x < 256; x++) {
-			for(int i = 0; i < greenBins[x]/50; i++) {
-				pw.setColor(x, maxGreen/50 - i - 1, Color.hsb(120, 1.0, 1.0));				
-			} 
+		for(int i = 0; i < greenBins.length; i++) {
+			
+			int scaled = (int) (100.0 * greenBins[i] / maxGreen);
+			
+			for(int j = 0; j < scaled; j++) {
+				pw.setColor(i, 100 - j - 1, Color.GREEN);
+			}
 		}
+		
 		return output;
 	}
 }

@@ -8,6 +8,8 @@ public class Fade extends ColorFilter {
 	private double coef;
 
 	public Fade(double coef) {
+		if(coef > 1.0) coef = 1.0;
+		if(coef < 0.0) coef = 0.0;
 		this.coef = coef;
 	}
 	

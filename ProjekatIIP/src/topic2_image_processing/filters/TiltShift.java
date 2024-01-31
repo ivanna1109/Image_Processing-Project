@@ -10,10 +10,10 @@ public class TiltShift extends Filter{
 
 	double[][] kernel;
 	int wk, hk;
-	char ts;
+	int ts;
 	
 	
-	public TiltShift(double[][] kernel, char ts) {
+	public TiltShift(double[][] kernel, int ts) {
 		if (kernel.length % 2 != 1 || kernel[0].length % 2 != 1) {
 			throw new IllegalArgumentException("Both the width and the height of the kernel must be odd.");
 		}
@@ -42,7 +42,7 @@ public class TiltShift extends Filter{
 		PixelReader pr = input.getPixelReader();
 		PixelWriter pw = output.getPixelWriter();
 
-		if(ts == 'r') {
+		if(ts == 0) {
 			// Za svaki piksel u output slici
 			for (int y = 0; y < h; y++) {
 				for (int x = 0; x < w; x++) {
@@ -85,7 +85,7 @@ public class TiltShift extends Filter{
 					}
 				}
 			}
-		} else if (ts == 'l') {
+		} else if (ts == 1) {
 			
 			int thirdY = (int) (input.getHeight() / 3);
 			

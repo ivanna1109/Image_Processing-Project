@@ -6,6 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="D:/MasterStudije/2. Godina/ZimskiSemestar/IIP/Project/Eclipse-workspace/DrawingFX 0.8 2019-11-06.jar" sourcepath="D:/MasterStudije/2. Godina/ZimskiSemestar/IIP/Project/Eclipse-workspace/DrawingFX 0.8 2019-11-06 - sources.jar"/>
+	<classpathentry kind="lib" path="/home/luka/Downloads/DrawingFX 0.8 2019-11-06.jar" sourcepath="/home/luka/Downloads/DrawingFX 0.8 2019-11-06 - sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
